@@ -43,21 +43,21 @@ fun TodoInputTextField(text: String, onTextChange: (String) -> Unit, modifier: M
 @Composable
 fun TodoItemEntryInput(onItemComplete: (TodoItem) -> Unit) {
     val (text, setText) = remember { mutableStateOf("") }
-    val (icon, setIcon) = remember { mutableStateOf(TodoIcon.Default)}
+    val (icon, setIcon) = remember { mutableStateOf(TodoIcon.Default) }
     val iconsVisible = text.isNotBlank()
     val submit = {
         onItemComplete(TodoItem(text, icon))
         setIcon(TodoIcon.Default)
         setText("")
     }
-    Column(content = TodoItemInput(
+    TodoItemInput(
         text = text,
         onTextChange = setText,
-        submit = submit,
-        iconsVisible = iconsVisible,
         icon = icon,
-        onIconChange = setIcon
-    ))
+        onIconChange = setIcon,
+        submit = submit,
+        iconsVisible = iconsVisible
+    )
 }
 
 @Composable
@@ -68,26 +68,26 @@ fun TodoItemInput(
     iconsVisible: Boolean,
     icon: TodoIcon,
     onIconChange: (TodoIcon) -> Unit
-): @Composable() (ColumnScope.() -> Unit) =
-    {
+) {
+    Column {
         Row(
             Modifier
                 .padding(horizontal = 16.dp)
                 .padding(top = 16.dp)
         ) {
             TodoInputText(
-                text = text,
-                onTextChange = onTextChange,
-                modifier = Modifier
+                text,
+                onTextChange,
+                Modifier
                     .weight(1f)
                     .padding(end = 8.dp),
-                onImeAction = submit
+                submit
             )
             TodoEditButton(
                 onClick = submit,
                 text = "Add",
                 modifier = Modifier.align(Alignment.CenterVertically),
-                enabled = text.isNotBlank() // enable if text is not blank
+                enabled = text.isNotBlank()
             )
         }
         if (iconsVisible) {
