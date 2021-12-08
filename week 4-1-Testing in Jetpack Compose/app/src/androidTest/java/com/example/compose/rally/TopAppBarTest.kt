@@ -28,6 +28,7 @@ class TopAppBarTest {
             .assertIsSelected()
     }
 
+    @Test
     fun rallyTopAppBarTest_currentLabelExists() {
         val allScreens = RallyScreen.values().toList()
         composeTestRule.setContent {
@@ -38,10 +39,14 @@ class TopAppBarTest {
             )
         }
 
-        composeTestRule.onRoot().printToLog("currentLabelExists")
-
         composeTestRule
-            .onNodeWithText(RallyScreen.Accounts.name.toUpperCase())
-            .assertExists() // Still fails
+            .onNode(
+                hasText(RallyScreen.Accounts.name.toUpperCase()) and
+                        hasParent(
+                            hasContentDescription(RallyScreen.Accounts.name)
+                        ),
+                useUnmergedTree = true
+            )
+            .assertExists()
     }
 }
